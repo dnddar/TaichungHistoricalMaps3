@@ -1,10 +1,14 @@
 package com.asdc.taichunghistoricalmaps;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,16 +41,22 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity
         implements
+        GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback,
         SeekBar.OnSeekBarChangeListener
@@ -428,7 +439,7 @@ public class MainActivity extends AppCompatActivity
         //showTut();
         setMap1(1);
 
-        //makeMarker();
+        makeMarker();
     }
     private void setMap1(final int mapnum) {
         Log.i(TAG, "setMap1 mapnum:" + mapnum);
@@ -481,6 +492,150 @@ public class MainActivity extends AppCompatActivity
             pheight = 200;
         }
         mMap.setPadding(0, pheight, 0, 0);
+
+    }
+
+    public void makeMarker() {
+
+        String nowlang = Locale.getDefault().getLanguage().toString();
+        String folder = "";
+
+        if (nowlang.equals("zh")) {
+            folder = "ch";
+        } else if (nowlang.equals("ja")) {
+            folder = "jp";
+        } else {
+            folder = "en";
+        }
+        folder = "ch";
+
+        for (int i = 1; i <= 180; i++) {
+            String item = null;
+            String fileID = null;
+            if (i < 10) {
+                fileID = "tc" + folder + "170000" + i;
+            } else if (i < 100) {
+                fileID = "tc" + folder + "17000" + i;
+            } else {
+                fileID = "tc" + folder + "1700" + i;
+            }
+
+            //System.out.println("fileID:"+fileID);
+
+
+            int fileName = getResources().getIdentifier(fileID, "xml", getPackageName());
+            //System.out.println("fileName:"+fileName);
+            if(fileName>0){
+                try {
+                    item = getItemFromXML(this, fileName);
+                } catch (XmlPullParserException e) {
+                    //System.out.println("nonono11111");
+                } catch (IOException e) {
+                    //System.out.println("nonono22222");
+                }
+
+                String[] items = item.split("\n");
+
+                String imageName = items[1];
+                imageName = "s_" + imageName.substring(0, 7);
+                int resID = getResources().getIdentifier(imageName, "drawable", getPackageName());
+                LatLng mPos = new LatLng(Float.parseFloat(items[2]), Float.parseFloat(items[3]));
+
+                Marker mark = mMap.addMarker(new MarkerOptions()
+                        .position(mPos)
+                        .title(items[7])
+                        .icon(BitmapDescriptorFactory.fromResource(resID)));
+
+                markary.add(mark);
+                markary_index.add(i);
+
+                xmlValue.add(item);
+
+            }
+
+
+        }
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        int mid = Integer.valueOf(marker.getId().substring(1));
+        Log.v(TAG, "onMarkerClick mid:" + mid);
+
+        String[] bb = xmlValue.get(mid).split("\n");
+
+        popwin(bb);
+        return false;
+
+    }
+
+    public void popwin(String[] bb) {
+
+        Log.v(TAG, "popwin");
+
+        /*Intent intent = new Intent(this, StreetView.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("data", bb);
+
+        intent.putExtras(bundle);
+
+        startActivity(intent);*/
+
+    }
+
+    public String getItemFromXML(Activity activity, int fileName) throws XmlPullParserException, IOException {
+
+        StringBuffer stringBuffer = new StringBuffer();
+        Resources res = activity.getResources();
+        XmlResourceParser xpp = res.getXml(fileName);
+        xpp.next();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG) {
+                String tagname = xpp.getName();
+
+                if (tagname.equals("id")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("picname")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("latitude")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("longitude")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("heading")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("pitch")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("zoom")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("title")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("date")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("rights")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("creator")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+                if (tagname.equals("description")) {
+                    stringBuffer.append(xpp.nextText() + "\n");
+                }
+            }
+            eventType = xpp.next();
+        }
+        return stringBuffer.toString();
 
     }
 
