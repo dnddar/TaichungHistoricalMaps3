@@ -1,0 +1,12 @@
+<resources>
+    <string name="Opacity">透明度</string>
+    <string name="OK">OK</string>
+    <string name="iknow">分かりました</string>
+    <string name="str_next">次へ</string>
+    <string name="str_Msg">ご注意　本アプリケーションのご利用にはインターネットへの接続が必要です。</string>
+    <string name="str_QRCodeError">QRCode Error</string>
+    <string name="str_wait">少う々お待ちください</string>
+    <string name="str_year">年代</string>
+    <string name="str_rights">写真提供機関</string>
+    <string name="str_creator">撮影者／書籍出所</string>
+</resources>

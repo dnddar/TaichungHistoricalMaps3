@@ -1,0 +1,12 @@
+<resources>
+    <string name="Opacity">透明度</string>
+    <string name="OK">確定</string>
+    <string name="iknow">我知道了</string>
+    <string name="str_next">下一步</string>
+    <string name="str_Msg">請連接您的網路功能！\n否則地圖及街景功能將不能完整使用</string>
+    <string name="str_QRCodeError">QRCode 錯誤</string>
+    <string name="str_wait">請稍候...</string>
+    <string name="str_year">年份</string>
+    <string name="str_rights">圖片提供單位</string>
+    <string name="str_creator">拍攝者／書籍出處</string>
+</resources>

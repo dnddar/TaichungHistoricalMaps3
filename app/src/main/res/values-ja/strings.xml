@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">臺中歷史地圖</string>
+    <string name="title_activity_main">臺中歷史地圖</string>
+    <string name="map_title">1895-臺中省城圖</string>
+    <string name="action_settings1">1895-臺中省城圖</string>
+    <string name="action_settings2">1913-臺中街實測圖</string>
+    <string name="action_settings3">1926-臺中市改正圖</string>
+    <string name="action_settings4">1937-臺中市地圖</string>
+    <string name="action_settings5">1943-臺中都市計畫圖</string>
+    <string name="action_settings6">1948-臺中市舊航照影像</string>
+    <string name="action_settings7">1959-臺中市舊航照影像</string>
+    <string name="action_settings8">1960-臺中市街道圖</string>
+    <string name="action_settings9">1970-臺中市觀光街圖</string>
+    <string name="action_settings10">1970-臺中市地形圖</string>
+    <string name="action_settings11">1986-臺中市區街道圖</string>
+</resources>
