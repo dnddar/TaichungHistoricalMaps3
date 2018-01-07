@@ -14,6 +14,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -30,8 +32,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +115,57 @@ public class MainActivity extends AppCompatActivity
             Log.i (TAG, "not Tablet");
         }
         checkPromission();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings1) {
+            setMap1(1);
+            return true;
+        } else if (id == R.id.action_settings2) {
+            setMap1(2);
+            return true;
+        } else if (id == R.id.action_settings3) {
+            setMap1(3);
+            return true;
+        } else if (id == R.id.action_settings4) {
+            setMap1(4);
+            return true;
+        } else if (id == R.id.action_settings5) {
+            setMap1(5);
+            return true;
+        } else if (id == R.id.action_settings6) {
+            setMap1(6);
+            return true;
+        } else if (id == R.id.action_settings7) {
+            setMap1(7);
+            return true;
+        } else if (id == R.id.action_settings8) {
+            setMap1(8);
+            return true;
+        } else if (id == R.id.action_settings9) {
+            setMap1(9);
+            return true;
+        } else if (id == R.id.action_settings10) {
+            setMap1(10);
+            return true;
+        } else if (id == R.id.action_settings11) {
+            setMap1(11);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void checkPromission() {
@@ -369,9 +426,62 @@ public class MainActivity extends AppCompatActivity
         });*/
 
         //showTut();
-        //setMap1(1);
+        setMap1(1);
 
         //makeMarker();
+    }
+    private void setMap1(final int mapnum) {
+        Log.i(TAG, "setMap1 mapnum:" + mapnum);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        }else{
+            mMap.setMyLocationEnabled(true);
+        }
+
+        final String Filename;
+        cur = mapnum - 1;
+        Filename = MapArray[cur];
+
+
+        if (loadFirst) {
+            tileOverlay.remove();
+        } else {
+            loadFirst = true;
+        }
+        tileProvider = new UrlTileProvider(256, 256) {
+            public URL getTileUrl(int x, int y, int zoom) {
+                try {
+                    int NewZoom = Integer.valueOf(17 - zoom);
+
+                    String tilename = "http://digitalarchives.tw/MapApp/taichunghistoricalmap/" + Filename + "/" + NewZoom + "/" + x + "/IMG_" + x + "_" + y + "_" + NewZoom + ".jpg";
+                    URL localURL = null;
+                    try {
+                        localURL = new URL(tilename);
+                    } catch (MalformedURLException localMalformedURLException) {
+                        throw new AssertionError(localMalformedURLException);
+                    }
+                    return localURL;
+                } finally {
+                }
+            }
+        };
+
+        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+        //String tid = tileOverlay.getId();
+
+        String aa = getResources().getString(MapName[cur]);
+        mMessageView.setText(aa);
+
+
+        panellayout = (RelativeLayout) findViewById(R.id.Panellayout);
+        int pheight = (int) panellayout.getHeight()+20;
+        //Log.i(TAG, "pheight:"+pheight);
+        if(pheight<=20){
+            pheight = 200;
+        }
+        mMap.setPadding(0, pheight, 0, 0);
+
     }
 
     @Override
