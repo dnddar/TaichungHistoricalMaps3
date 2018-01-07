@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity
 {
 
     private GoogleMap mMap;
-    private GoogleMap mMap;
     static final LatLng initPos = new LatLng(24.142282, 120.680728);
     static final int zoom = 15;
     private TileOverlay tileOverlay;
