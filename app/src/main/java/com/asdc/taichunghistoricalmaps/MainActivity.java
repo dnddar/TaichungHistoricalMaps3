@@ -574,14 +574,14 @@ public class MainActivity extends AppCompatActivity
 
         Log.v(TAG, "popwin");
 
-        /*Intent intent = new Intent(this, StreetView.class);
+        Intent intent = new Intent(this, StreetView.class);
 
         Bundle bundle = new Bundle();
         bundle.putStringArray("data", bb);
 
         intent.putExtras(bundle);
 
-        startActivity(intent);*/
+        startActivity(intent);
 
     }
 
