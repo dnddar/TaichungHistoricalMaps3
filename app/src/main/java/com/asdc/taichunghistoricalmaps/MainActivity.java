@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileProvider;
@@ -39,7 +41,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity
         implements
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        SeekBar.OnSeekBarChangeListener
 
 {
 
@@ -259,10 +262,133 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(24.142282, 120.680728);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initPos, zoom));
+        //mMap.setOnMyLocationButtonClickListener(this);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        wwidth = size.x;
+        wheight = size.y;
 
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Log.i(TAG, "onMapReady");
+        initMap();
+    }
+    public void initMap() {
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        wwidth = size.x;
+        wheight = size.y;
+
+        MapName = new int[]{
+                R.string.action_settings1,
+                R.string.action_settings2,
+                R.string.action_settings3,
+                R.string.action_settings4,
+                R.string.action_settings5,
+                R.string.action_settings6,
+                R.string.action_settings7,
+                R.string.action_settings8,
+                R.string.action_settings9,
+                R.string.action_settings10,
+                R.string.action_settings11,
+        };
+
+        MapArray = new String[11];
+        MapArray[0] = new String("Taichung_1895");
+        MapArray[1] = new String("Taichung_1913");
+        MapArray[2] = new String("Taichung_1926");
+        MapArray[3] = new String("Taichung_1937");
+        MapArray[4] = new String("Taichung_1943");
+        MapArray[5] = new String("Taichung_1948");
+        MapArray[6] = new String("Taichung_1959");
+        MapArray[7] = new String("Taichung_1960");
+        MapArray[8] = new String("Taichung_1970A");
+        MapArray[9] = new String("Taichung_1970B");
+        MapArray[10] = new String("Taichung_1986");
+
+        goHide = false;
+        mMessageView = (TextView) findViewById(R.id.message_text);
+
+        Opacity = (String) this.getResources().getText(R.string.Opacity);
+
+        int neww = wwidth/5*2;
+        seekbar = (SeekBar) findViewById(R.id.seekBar1); // make seekbar object
+        seekbar.setOnSeekBarChangeListener(this); // set seekbar listener.
+        if (tabletSize) {
+            ViewGroup.LayoutParams params=seekbar.getLayoutParams();
+            params.width=neww;
+            seekbar.setLayoutParams(params);
+        }
+
+        mAlpha = (TextView) findViewById(R.id.alpha_text);
+        mAlpha.setText(Opacity + ":100");
+
+        hideset = (ImageButton) findViewById(R.id.hideset);
+        hideset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "hideset");
+                // TODO Auto-generated method stub
+                if (goHide == false) {
+                    int len = markary.size();
+                    for (int i = 0; i < len; i++) {
+                        Marker mark = (Marker) markary.get(i);
+                        mark.setVisible(false);
+                    }
+                    goHide = true;
+                } else {
+                    int len = markary.size();
+                    for (int i = 0; i < len; i++) {
+                        Marker mark = (Marker) markary.get(i);
+                        mark.setVisible(true);
+                    }
+                    goHide = false;
+                }
+            }
+        });
+
+        /*qr = (ImageButton) findViewById(R.id.scan_btn);
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanBarcode(v);
+                Log.i(TAG,"scanBarcode");
+            }
+        });
+
+        tut = (ImageButton) findViewById(R.id.tut);
+        tut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTut();
+                Log.i(TAG,"tututut");
+
+            }
+        });*/
+
+        //showTut();
+        //setMap1(1);
+
+        //makeMarker();
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (tileOverlay != null) {
+            float alpha = (float) (1 - ((float) progress / (float) TRANSPARENCY_MAX));
+            tileOverlay.setTransparency(alpha);
+        }
+        mAlpha.setText(String.format(Opacity + ":%d", progress));
+
     }
 }
