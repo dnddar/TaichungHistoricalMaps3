@@ -6,5 +6,116 @@
     android:orientation="vertical"
     android:background="#000000">
 
+    <ImageView
+        android:id="@+id/streetimg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center"/>
+
+    <fragment
+        android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
+        android:id="@+id/streetviewpanorama"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <RelativeLayout
+        android:id="@+id/seekbar_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:paddingRight="40dp"
+        android:paddingLeft="40dp"
+        android:background="#aaFFFFFF"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp">
+        <SeekBar android:id="@+id/seekBar1"
+            android:max="100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingRight="130dp"
+            android:paddingLeft="30dp"
+            android:layout_marginTop="25dp"
+            android:progress="255"
+            ></SeekBar>
+
+        <TextView
+            android:id="@+id/alpha_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:gravity="right"
+            android:padding="10dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/piclayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:layout_gravity="center" >
+
+        <ImageView
+            android:id="@+id/oldimg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:background="@drawable/imgborder"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/ttview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:layout_gravity="center" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width = "fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width = "fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/right_text"
+                android:layout_width = "fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/creator_text"
+                android:layout_width = "fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width = "fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="40dp"
+                android:layout_alignParentBottom="true"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
